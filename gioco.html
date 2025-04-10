@@ -13,7 +13,7 @@
             position: relative;
             width: 100vw;
             height: 100vh;
-            background: url('giochinobookino.jpg') no-repeat center center/cover;
+            background: url('mia-immagine.jpg') no-repeat center center/cover;
         }
         .header {
             position: absolute;
@@ -33,15 +33,13 @@
         }
         .object {
             position: absolute;
-            width: 40px;
-            height: 40px;
-            background-color: rgba(255, 0, 0, 0.5);
-            border-radius: 50%;
+            width: 50px;
+            height: 50px;
             cursor: pointer;
-            display: none;
         }
         .found {
-            background-color: rgba(0, 255, 0, 0.5);
+            border: 3px solid green;
+            border-radius: 10px;
         }
         #message {
             position: absolute;
@@ -61,11 +59,11 @@
         <img src="oggetto.png" alt="Oggetto da trovare">
     </div>
     <div class="game-container">
-        <div class="object" style="top: 20%; left: 30%;"></div>
-        <div class="object" style="top: 50%; left: 60%;"></div>
-        <div class="object" style="top: 70%; left: 40%;"></div>
-        <div class="object" style="top: 30%; left: 80%;"></div>
-        <div class="object" style="top: 60%; left: 10%;"></div>
+        <img class="object" src="oggetto1.png" style="top: 20%; left: 30%;">
+        <img class="object" src="oggetto2.png" style="top: 50%; left: 60%;">
+        <img class="object" src="oggetto3.png" style="top: 70%; left: 40%;">
+        <img class="object" src="oggetto4.png" style="top: 30%; left: 80%;">
+        <img class="object" src="oggetto5.png" style="top: 60%; left: 10%;">
     </div>
     <div id="message">Hai trovato tutti gli oggetti!</div>
 
@@ -75,7 +73,6 @@
             let foundCount = 0;
 
             objects.forEach(obj => {
-                obj.style.display = "block";
                 obj.addEventListener("click", function() {
                     if (!obj.classList.contains("found")) {
                         obj.classList.add("found");
