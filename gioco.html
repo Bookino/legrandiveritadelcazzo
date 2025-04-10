@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trova gli Oggetti</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+        }
+        .game-container {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+            background: url('immagine.jpg') no-repeat center center/cover;
+        }
+        .object {
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            background-color: rgba(255, 0, 0, 0.5);
+            border-radius: 50%;
+            cursor: pointer;
+            display: none;
+        }
+        .found {
+            background-color: rgba(0, 255, 0, 0.5);
+        }
+        #message {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 20px;
+            font-size: 24px;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="game-container">
+        <div class="object" style="top: 20%; left: 30%;"></div>
+        <div class="object" style="top: 50%; left: 60%;"></div>
+        <div class="object" style="top: 70%; left: 40%;"></div>
+        <div class="object" style="top: 30%; left: 80%;"></div>
+        <div class="object" style="top: 60%; left: 10%;"></div>
+    </div>
+    <div id="message">Hai trovato tutti gli oggetti!</div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            let objects = document.querySelectorAll(".object");
+            let foundCount = 0;
+
+            objects.forEach(obj => {
+                obj.style.display = "block";
+                obj.addEventListener("click", function() {
+                    if (!obj.classList.contains("found")) {
+                        obj.classList.add("found");
+                        foundCount++;
+                        if (foundCount === objects.length) {
+                            document.getElementById("message").style.display = "block";
+                        }
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
