@@ -17,19 +17,33 @@
         }
         .header {
             position: absolute;
-            top: 10px;
+            top: 20px;
             left: 50%;
             transform: translateX(-50%);
             background: rgba(255, 255, 255, 0.8);
-            padding: 10px;
+            padding: 15px;
             border-radius: 10px;
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 15px;
+            font-size: 24px;
+            font-weight: bold;
+            z-index: 10;
         }
         .header img {
-            width: 40px;
-            height: 40px;
+            width: 50px;
+            height: 50px;
+        }
+        .title {
+            position: absolute;
+            top: 5%;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 48px;
+            font-weight: bold;
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+            z-index: 10;
         }
         .object {
             position: absolute;
@@ -54,16 +68,17 @@
     </style>
 </head>
 <body>
+    <div class="title">Trova tutti gli oggetti nascosti!</div>
     <div class="header">
         <span>Trova tutti i</span>
         <img src="oggetto.png" alt="Oggetto da trovare">
     </div>
     <div class="game-container">
         <img class="object" src="SOLOFACCIAMEMESIMBOLO.png" style="top: 20%; left: 30%;">
-        <img class="object" src="SOLOFACCIAMEMESIMBOLO.png" style="top: 50%; left: 60%;">
-        <img class="object" src="SOLOFACCIAMEMESIMBOLO.png" style="top: 70%; left: 40%;">
-        <img class="object" src="SOLOFACCIAMEMESIMBOLO.png" style="top: 30%; left: 80%;">
-        <img class="object" src="SOLOFACCIAMEMESIMBOLO.png" style="top: 60%; left: 10%;">
+        <img class="object" src="oggetto2.png" style="top: 50%; left: 60%;">
+        <img class="object" src="oggetto3.png" style="top: 70%; left: 40%;">
+        <img class="object" src="oggetto4.png" style="top: 30%; left: 80%;">
+        <img class="object" src="oggetto5.png" style="top: 60%; left: 10%;">
     </div>
     <div id="message">Hai trovato tutti gli oggetti!</div>
 
