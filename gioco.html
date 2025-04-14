@@ -19,22 +19,18 @@
       width: 100%;
       height: 100%;
       background-color: black;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-
-    .background-wrapper {
-      position: relative;
-      max-width: 100%;
-      max-height: 100%;
-      aspect-ratio: 16/9; /* Importante: usa l'aspect ratio della tua immagine */
     }
 
     .background {
+      position: absolute;
+      top: 0;
+      left: 0;
       width: 100%;
       height: 100%;
-      object-fit: contain;
+      background-image: url('giochinobookino.jpg');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
     }
 
     .title {
@@ -80,21 +76,12 @@
       right: 2%;
     }
 
-    .objects {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-    }
-
     .objects .object {
       position: absolute;
       cursor: pointer;
       z-index: 20;
       width: clamp(30px, 8vw, 50px);
       height: clamp(30px, 8vw, 50px);
-      transform: translate(-50%, -50%);
     }
 
     .objects .object img {
@@ -103,7 +90,7 @@
       object-fit: contain;
     }
 
-    /* POSIZIONI ORIGINALI (da modificare secondo necessità) */
+    /* Posizioni degli oggetti in percentuale */
     #object1 { top: 36%; left: 35.2%; }
     #object2 { top: 58.5%; left: 5%; }
     #object3 { top: 49%; left: 42%; }
@@ -166,6 +153,22 @@
       border: none;
       outline: none;
     }
+
+    /* Regolazione per schermi molto stretti */
+    @media (max-aspect-ratio: 9/16) {
+      .title, .timer, .objects-found {
+        top: 1%;
+      }
+      
+      #toggleMusic {
+        bottom: 1%;
+      }
+      
+      .objects .object {
+        width: clamp(25px, 7vw, 40px);
+        height: clamp(25px, 7vw, 40px);
+      }
+    }
   </style>
 </head>
 <body>
@@ -174,9 +177,7 @@
   </div>
 
   <div class="game-container">
-    <div class="background-wrapper">
-      <img class="background" src="giochinobookino.jpg" alt="Sfondo del gioco" />
-      
+    <div class="background">
       <div class="title">
         TROVA TUTTI I
         <img src="cosoneromeglioevitare.jpg" alt="Oggetto" />
@@ -248,10 +249,11 @@
         objectsFound++;
         document.getElementById("objectsFound").innerText = "Oggetti trovati: " + objectsFound;
         
+        // Riproduci l'effetto sonoro ogni volta che un oggetto viene cliccato
         const clickSound = document.getElementById('clickSound');
         clickSound.play();
 
-        if (objectsFound === 1) startTimer();
+        if (objectsFound === 1) startTimer();  // Timer parte solo alla prima interazione
         if (objectsFound === 5) {
           stopTimer();
           document.getElementById("winMessage").style.display = "block";
@@ -268,6 +270,7 @@
       }
     }
 
+    // Funzione per gestire il pulsante di accensione/spegnimento della musica
     toggleMusicBtn.addEventListener("click", () => {
       if (musicOn) {
         backgroundMusic.pause();
@@ -279,40 +282,21 @@
       musicOn = !musicOn;
     });
 
-    // Calibrazione automatica basata sulla dimensione reale dell'immagine
-    function calibratePositions() {
-      const bgImg = document.querySelector('.background');
-      if (!bgImg.complete) {
-        bgImg.onload = calibratePositions;
-        return;
-      }
-      
-      const container = document.querySelector('.background-wrapper');
-      const imgRatio = bgImg.naturalWidth / bgImg.naturalHeight;
-      const containerRatio = container.clientWidth / container.clientHeight;
-      
-      if (imgRatio > containerRatio) {
-        // Immagine occupa tutta la larghezza
-        const scale = container.clientWidth / bgImg.naturalWidth;
-        const offsetY = (container.clientHeight - bgImg.naturalHeight * scale) / 2;
-        document.querySelector('.objects').style.transform = `translateY(${offsetY}px)`;
-      } else {
-        // Immagine occupa tutta l'altezza
-        const scale = container.clientHeight / bgImg.naturalHeight;
-        const offsetX = (container.clientWidth - bgImg.naturalWidth * scale) / 2;
-        document.querySelector('.objects').style.transform = `translateX(${offsetX}px)`;
-      }
+    // Ottimizzazione per il ridimensionamento
+    let resizeTimeout;
+    function handleResize() {
+      clearTimeout(resizeTimeout);
+      resizeTimeout = setTimeout(() => {
+        checkOrientation();
+      }, 100);
     }
 
-    window.addEventListener("resize", calibratePositions);
-    window.addEventListener("orientationchange", () => {
-      checkOrientation();
-      calibratePositions();
-    });
+    window.addEventListener("resize", handleResize);
+    window.addEventListener("orientationchange", checkOrientation);
     window.addEventListener("load", () => {
       checkOrientation();
-      calibratePositions();
       
+      // Tentativo di autoplay con gestione dell'errore
       document.addEventListener('click', function initialMusic() {
         if (!musicOn) {
           backgroundMusic.play().then(() => {
