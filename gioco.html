@@ -8,16 +8,16 @@
     html, body {
       margin: 0;
       padding: 0;
-      width: 100vw;
-      height: 100vh;
+      width: 100%;
+      height: 100%;
       overflow: hidden;
       font-family: Arial, sans-serif;
     }
 
     .game-container {
       position: relative;
-      width: 100vw;
-      height: 100vh;
+      width: 100%;
+      height: 100%;
       background-color: black;
     }
 
@@ -30,63 +30,67 @@
       background-image: url('giochinobookino.jpg');
       background-size: cover;
       background-position: center;
+      background-repeat: no-repeat;
     }
 
     .title {
       position: absolute;
-      top: 5%;
+      top: 2%;
       left: 50%;
       transform: translateX(-50%);
-      padding: 10px 20px;
-      font-size: 2rem;
+      padding: 8px 16px;
+      font-size: clamp(1.2rem, 4vw, 2rem);
       color: white;
       z-index: 10;
       display: flex;
       align-items: center;
       justify-content: center;
+      background: rgba(0, 0, 0, 0.6);
+      border-radius: 12px;
+      white-space: nowrap;
     }
 
     .title img {
-      width: 30px;
-      height: 30px;
-      margin-left: 10px;
+      width: clamp(20px, 5vw, 30px);
+      height: clamp(20px, 5vw, 30px);
+      margin-left: 8px;
     }
 
     .timer, .objects-found {
       position: absolute;
-      top: 5%;
-      font-size: 1.5rem;
+      top: 2%;
+      font-size: clamp(0.9rem, 3vw, 1.5rem);
       color: white;
       z-index: 10;
+      background: rgba(0, 0, 0, 0.6);
+      padding: 6px 12px;
+      border-radius: 12px;
+      white-space: nowrap;
     }
 
     .timer {
-      left: 5%;
-      background: rgba(0, 0, 0, 0.6);
-      padding: 8px 15px;
-      border-radius: 12px;
+      left: 2%;
     }
 
     .objects-found {
-      right: 5%;
-      background: rgba(0, 0, 0, 0.6);
-      padding: 8px 15px;
-      border-radius: 12px;
+      right: 2%;
     }
 
     .objects .object {
       position: absolute;
       cursor: pointer;
       z-index: 20;
-      width: 12vw;  /* Uso una misura relativa per la larghezza */
-      height: 12vw; /* Uso una misura relativa per l'altezza */
+      width: clamp(30px, 8vw, 50px);
+      height: clamp(30px, 8vw, 50px);
     }
 
     .objects .object img {
       width: 100%;
       height: 100%;
+      object-fit: contain;
     }
 
+    /* Posizioni degli oggetti in percentuale */
     #object1 { top: 36%; left: 35.2%; }
     #object2 { top: 58.5%; left: 5%; }
     #object3 { top: 49%; left: 42%; }
@@ -99,11 +103,14 @@
       left: 50%;
       transform: translate(-50%, -50%);
       background: rgba(255,255,255,0.9);
-      padding: 30px 40px;
+      padding: 20px 30px;
       border-radius: 15px;
-      font-size: 2rem;
+      font-size: clamp(1.5rem, 5vw, 2rem);
       z-index: 30;
       display: none;
+      text-align: center;
+      max-width: 90%;
+      box-sizing: border-box;
     }
 
     .rotate-warning {
@@ -119,8 +126,9 @@
       justify-content: center;
       align-items: center;
       text-align: center;
-      font-size: 2rem;
+      font-size: clamp(1.5rem, 5vw, 2rem);
       padding: 20px;
+      box-sizing: border-box;
     }
 
     @media screen and (orientation: portrait) {
@@ -131,36 +139,34 @@
 
     #toggleMusic {
       position: absolute;
-      bottom: 10%;
+      bottom: 2%;
       left: 50%;
       transform: translateX(-50%);
       background: rgba(0, 0, 0, 0.6);
-      padding: 10px 20px;
+      padding: 8px 16px;
       color: white;
       border-radius: 12px;
-      font-size: 1.2rem;
+      font-size: clamp(1rem, 3vw, 1.2rem);
       cursor: pointer;
       z-index: 20;
+      white-space: nowrap;
+      border: none;
+      outline: none;
     }
 
-    /* Aggiusto il layout per schermi piccoli */
-    @media screen and (max-width: 768px) {
-      .title {
-        font-size: 1.5rem;  /* Ridurre la dimensione del titolo per schermi piccoli */
+    /* Regolazione per schermi molto stretti */
+    @media (max-aspect-ratio: 9/16) {
+      .title, .timer, .objects-found {
+        top: 1%;
       }
-
-      .timer, .objects-found {
-        font-size: 1rem;  /* Font più piccolo */
+      
+      #toggleMusic {
+        bottom: 1%;
       }
-
-      .win-message {
-        font-size: 1.5rem;
-        padding: 20px 30px;
-      }
-
+      
       .objects .object {
-        width: 20vw;  /* Oggetti più piccoli su dispositivi mobili */
-        height: 20vw;
+        width: clamp(25px, 7vw, 40px);
+        height: clamp(25px, 7vw, 40px);
       }
     }
   </style>
@@ -243,10 +249,11 @@
         objectsFound++;
         document.getElementById("objectsFound").innerText = "Oggetti trovati: " + objectsFound;
         
+        // Riproduci l'effetto sonoro ogni volta che un oggetto viene cliccato
         const clickSound = document.getElementById('clickSound');
         clickSound.play();
 
-        if (objectsFound === 1) startTimer();  
+        if (objectsFound === 1) startTimer();  // Timer parte solo alla prima interazione
         if (objectsFound === 5) {
           stopTimer();
           document.getElementById("winMessage").style.display = "block";
@@ -263,21 +270,44 @@
       }
     }
 
+    // Funzione per gestire il pulsante di accensione/spegnimento della musica
     toggleMusicBtn.addEventListener("click", () => {
       if (musicOn) {
         backgroundMusic.pause();
         toggleMusicBtn.innerText = "🔇 Musica: OFF";
       } else {
-        backgroundMusic.play();
+        backgroundMusic.play().catch(e => console.log("Autoplay non consentito:", e));
         toggleMusicBtn.innerText = "🔊 Musica: ON";
       }
       musicOn = !musicOn;
     });
 
-    window.addEventListener("resize", checkOrientation);
+    // Ottimizzazione per il ridimensionamento
+    let resizeTimeout;
+    function handleResize() {
+      clearTimeout(resizeTimeout);
+      resizeTimeout = setTimeout(() => {
+        checkOrientation();
+      }, 100);
+    }
+
+    window.addEventListener("resize", handleResize);
     window.addEventListener("orientationchange", checkOrientation);
     window.addEventListener("load", () => {
       checkOrientation();
+      
+      // Tentativo di autoplay con gestione dell'errore
+      document.addEventListener('click', function initialMusic() {
+        if (!musicOn) {
+          backgroundMusic.play().then(() => {
+            musicOn = true;
+            toggleMusicBtn.innerText = "🔊 Musica: ON";
+          }).catch(e => {
+            console.log("Autoplay non consentito:", e);
+          });
+        }
+        document.removeEventListener('click', initialMusic);
+      }, { once: true });
     });
   </script>
 </body>
