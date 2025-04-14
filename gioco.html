@@ -5,13 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title>Trova gli oggetti</title>
   <style>
-    * {
+    html, body {
       margin: 0;
       padding: 0;
-      box-sizing: border-box;
-    }
-
-    html, body {
       width: 100vw;
       height: 100vh;
       overflow: hidden;
@@ -22,19 +18,18 @@
       position: relative;
       width: 100vw;
       height: 100vh;
-      overflow: hidden;
+      background-color: black;
     }
 
     .background {
-      width: 100%;
-      height: 100%;
-      background-image: url('giochinobookino.jpg');
-      background-size: contain;
-      background-repeat: no-repeat;
-      background-position: center;
       position: absolute;
       top: 0;
       left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: url('giochinobookino.jpg');
+      background-size: cover;
+      background-position: center;
     }
 
     .title {
@@ -42,17 +37,16 @@
       top: 5%;
       left: 50%;
       transform: translateX(-50%);
-      color: #000;
+      background: rgba(255,255,255,0.8);
+      padding: 10px 20px;
+      border-radius: 12px;
       font-size: 2rem;
-      text-align: center;
       z-index: 10;
-      background-color: rgba(255, 255, 255, 0.7);
-      padding: 5px 10px;
-      border-radius: 10px;
     }
 
     .title img {
       width: 30px;
+      vertical-align: middle;
       margin-left: 10px;
     }
 
@@ -60,24 +54,16 @@
       position: absolute;
       top: 5%;
       left: 5%;
+      background: rgba(255,255,255,0.8);
+      padding: 8px 15px;
+      border-radius: 12px;
       font-size: 1.5rem;
-      color: #000;
-      background-color: rgba(255,255,255,0.7);
-      padding: 5px 10px;
-      border-radius: 10px;
       z-index: 10;
-    }
-
-    .objects {
-      position: absolute;
-      width: 100%;
-      height: 100%;
     }
 
     .objects .object {
       position: absolute;
       cursor: pointer;
-      transition: opacity 0.3s ease;
       z-index: 20;
     }
 
@@ -86,97 +72,77 @@
       height: 50px;
     }
 
-    .win-message {
-      display: none;
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      font-size: 2rem;
-      color: #000;
-      font-weight: bold;
-      z-index: 30;
-      background-color: rgba(255, 255, 255, 0.8);
-      padding: 20px;
-      border-radius: 15px;
-    }
-
     #object1 { top: 20%; left: 30%; }
     #object2 { top: 40%; left: 50%; }
     #object3 { top: 60%; left: 70%; }
     #object4 { top: 70%; left: 20%; }
     #object5 { top: 80%; left: 60%; }
 
-    .portrait-warning {
-      display: flex;
-      visibility: hidden;
+    .win-message {
       position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: rgba(255,255,255,0.9);
+      padding: 30px 40px;
+      border-radius: 15px;
+      font-size: 2rem;
+      z-index: 30;
+      display: none;
+    }
+
+    .rotate-warning {
+      position: fixed;
       top: 0;
       left: 0;
       width: 100vw;
       height: 100vh;
-      background: #000;
+      background: black;
       color: white;
       z-index: 9999;
-      font-size: 1.5rem;
+      display: none;
       justify-content: center;
       align-items: center;
       text-align: center;
+      font-size: 2rem;
       padding: 20px;
     }
 
-    @media (max-width: 768px) {
-      .title {
-        font-size: 1.5rem;
-      }
-
-      .objects .object img {
-        width: 40px;
-        height: 40px;
-      }
-    }
-
-    @media (max-width: 480px) {
-      .title {
-        font-size: 1.2rem;
-      }
-
-      .objects .object img {
-        width: 35px;
-        height: 35px;
+    @media screen and (orientation: portrait) {
+      .rotate-warning {
+        display: flex;
       }
     }
   </style>
 </head>
 <body>
-  <div class="game-container">
-    <div id="rotateWarning" class="portrait-warning">
-      Ruota il telefono in orizzontale per giocare
-    </div>
+  <div class="rotate-warning" id="rotateWarning">
+    Ruota il telefono in orizzontale per giocare 👈📱👉
+  </div>
 
+  <div class="game-container">
     <div class="background">
       <div class="title">
-        <span>TROVA TUTTI I</span>
-        <img src="oggettodatrovareimmagine.jpg" alt="Oggetto da trovare" />
+        TROVA TUTTI I
+        <img src="oggettodatrovareimmagine.jpg" alt="Oggetto" />
       </div>
-
       <div class="timer" id="timer">Tempo: 0s</div>
 
       <div class="objects">
         <div class="object" id="object1" onclick="findObject('object1')">
-          <img src="SOLOFACCIAMEMESIMBOLO.png" alt="Oggetto 1" />
+          <img src="SOLOFACCIAMEMESIMBOLO.png" />
         </div>
         <div class="object" id="object2" onclick="findObject('object2')">
-          <img src="oggettodatrovareimmagine.jpg" alt="Oggetto 2" />
+          <img src="oggettodatrovareimmagine.jpg" />
         </div>
         <div class="object" id="object3" onclick="findObject('object3')">
-          <img src="oggettodatrovareimmagine.jpg" alt="Oggetto 3" />
+          <img src="oggettodatrovareimmagine.jpg" />
         </div>
         <div class="object" id="object4" onclick="findObject('object4')">
-          <img src="oggettodatrovareimmagine.jpg" alt="Oggetto 4" />
+          <img src="oggettodatrovareimmagine.jpg" />
         </div>
         <div class="object" id="object5" onclick="findObject('object5')">
-          <img src="oggettodatrovareimmagine.jpg" alt="Oggetto 5" />
+          <img src="oggettodatrovareimmagine.jpg" />
         </div>
       </div>
 
@@ -202,26 +168,25 @@
       clearInterval(timerInterval);
     }
 
-    function findObject(objectId) {
-      const object = document.getElementById(objectId);
-      if (object.style.opacity !== '0.5') {
-        object.style.opacity = '0.5';
+    function findObject(id) {
+      const el = document.getElementById(id);
+      if (el && el.style.opacity !== '0.5') {
+        el.style.opacity = '0.5';
         objectsFound++;
-        if (objectsFound === 1) startTimer(); // avvia il timer al primo clic
+        if (objectsFound === 1) startTimer();
         if (objectsFound === 5) {
           stopTimer();
-          document.getElementById('winMessage').style.display = 'block';
+          document.getElementById("winMessage").style.display = "block";
         }
       }
     }
 
     function checkOrientation() {
-      const warning = document.getElementById('rotateWarning');
-      const isPortrait = window.matchMedia("(orientation: portrait)").matches;
-      if (isPortrait) {
-        warning.style.visibility = 'visible';
+      const warning = document.getElementById("rotateWarning");
+      if (window.innerHeight > window.innerWidth) {
+        warning.style.display = "flex";
       } else {
-        warning.style.visibility = 'hidden';
+        warning.style.display = "none";
       }
     }
 
