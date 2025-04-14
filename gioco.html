@@ -37,9 +37,9 @@
       top: 5%;
       left: 50%;
       transform: translateX(-50%);
-      font-size: 3rem;
+      padding: 10px 20px;
+      font-size: 2rem;
       color: white;
-      font-weight: bold;
       z-index: 10;
       display: flex;
       align-items: center;
@@ -47,22 +47,31 @@
     }
 
     .title img {
-      width: 40px;
-      margin-left: 10px;
+      width: 30px; /* Immagine più piccola */
+      height: 30px; /* Immagine più piccola */
+      margin-left: 10px; /* Distanza tra il testo e l'immagine */
+    }
+
+    .timer, .objects-found {
+      position: absolute;
+      top: 5%;
+      font-size: 1.5rem;
+      color: white;
+      z-index: 10;
     }
 
     .timer {
-      position: absolute;
-      top: 5%;
+      left: 5%;
+      background: rgba(0, 0, 0, 0.6);
+      padding: 8px 15px;
+      border-radius: 12px;
+    }
+
+    .objects-found {
       right: 5%;
       background: rgba(0, 0, 0, 0.6);
-      color: white;
-      padding: 10px 20px;
+      padding: 8px 15px;
       border-radius: 12px;
-      font-size: 1.8rem;
-      font-weight: bold;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
-      z-index: 10;
     }
 
     .objects .object {
@@ -76,11 +85,11 @@
       height: 50px;
     }
 
-    #object1 { top: 20%; left: 30%; }
-    #object2 { top: 40%; left: 50%; }
-    #object3 { top: 60%; left: 70%; }
-    #object4 { top: 70%; left: 20%; }
-    #object5 { top: 80%; left: 60%; }
+    #object1 { top: 36%; left: 35.2%; }
+    #object2 { top: 58.5%; left: 5%; }
+    #object3 { top: 49%; left: 42%; }
+    #object4 { top: 90%; left: 90%; }
+    #object5 { top: 44%; left: 92%; }
 
     .win-message {
       position: absolute;
@@ -117,6 +126,20 @@
         display: flex;
       }
     }
+
+    #toggleMusic {
+      position: absolute;
+      bottom: 5%;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(0, 0, 0, 0.6);
+      padding: 10px 20px;
+      color: white;
+      border-radius: 12px;
+      font-size: 1.2rem;
+      cursor: pointer;
+      z-index: 20;
+    }
   </style>
 </head>
 <body>
@@ -128,38 +151,56 @@
     <div class="background">
       <div class="title">
         TROVA TUTTI I
-        <img src="oggettodatrovareimmagine.jpg" alt="Oggetto" />
+        <img src="cosoneromeglioevitare.jpg" alt="Oggetto" />
       </div>
       <div class="timer" id="timer">Tempo: 0s</div>
+      <div class="objects-found" id="objectsFound">Oggetti trovati: 0</div>
 
       <div class="objects">
         <div class="object" id="object1" onclick="findObject('object1')">
-          <img src="SOLOFACCIAMEMESIMBOLO.png" />
+          <img src="COSONERO1.png" />
         </div>
         <div class="object" id="object2" onclick="findObject('object2')">
-          <img src="oggettodatrovareimmagine.jpg" />
+          <img src="COSONERO1.png" />
         </div>
         <div class="object" id="object3" onclick="findObject('object3')">
-          <img src="oggettodatrovareimmagine.jpg" />
+          <img src="cosoneromeglioevitare-removebg-preview.png" />
         </div>
         <div class="object" id="object4" onclick="findObject('object4')">
-          <img src="oggettodatrovareimmagine.jpg" />
+          <img src="cosoneromeglioevitare-removebg-preview.png" />
         </div>
         <div class="object" id="object5" onclick="findObject('object5')">
-          <img src="oggettodatrovareimmagine.jpg" />
+          <img src="cosoneromeglioevitare-removebg-preview.png" />
         </div>
       </div>
 
       <div id="winMessage" class="win-message">
         Hai trovato tutti gli oggetti!
       </div>
+
+      <button id="toggleMusic">🔇 Musica: OFF</button>
     </div>
   </div>
+
+  <!-- Musica di sottofondo -->
+  <audio id="backgroundMusic" loop>
+    <source src="funny-comedy-memes-music-humor-comic-background-intro-theme-272171.mp3" type="audio/mp3" />
+    Il tuo browser non supporta l'elemento audio.
+  </audio>
+
+  <!-- Effetto sonoro per il clic -->
+  <audio id="clickSound">
+    <source src="pet-squeak-toy-81315 (mp3cut.net).mp3" type="audio/mp3" />
+    Il tuo browser non supporta l'elemento audio.
+  </audio>
 
   <script>
     let objectsFound = 0;
     let seconds = 0;
     let timerInterval;
+    const backgroundMusic = document.getElementById("backgroundMusic");
+    const toggleMusicBtn = document.getElementById("toggleMusic");
+    let musicOn = false;
 
     function startTimer() {
       timerInterval = setInterval(() => {
@@ -177,7 +218,13 @@
       if (el && el.style.opacity !== '0.5') {
         el.style.opacity = '0.5';
         objectsFound++;
-        if (objectsFound === 1) startTimer();
+        document.getElementById("objectsFound").innerText = "Oggetti trovati: " + objectsFound;
+        
+        // Riproduci l'effetto sonoro ogni volta che un oggetto viene cliccato
+        const clickSound = document.getElementById('clickSound');
+        clickSound.play();
+
+        if (objectsFound === 1) startTimer();  // Timer parte solo alla prima interazione
         if (objectsFound === 5) {
           stopTimer();
           document.getElementById("winMessage").style.display = "block";
@@ -194,9 +241,23 @@
       }
     }
 
+    // Funzione per gestire il pulsante di accensione/spegnimento della musica
+    toggleMusicBtn.addEventListener("click", () => {
+      if (musicOn) {
+        backgroundMusic.pause();
+        toggleMusicBtn.innerText = "🔇 Musica: OFF";
+      } else {
+        backgroundMusic.play();
+        toggleMusicBtn.innerText = "🔊 Musica: ON";
+      }
+      musicOn = !musicOn;
+    });
+
     window.addEventListener("resize", checkOrientation);
     window.addEventListener("orientationchange", checkOrientation);
-    window.addEventListener("load", checkOrientation);
+    window.addEventListener("load", () => {
+      checkOrientation();
+    });
   </script>
 </body>
 </html>
