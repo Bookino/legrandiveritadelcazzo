@@ -2,7 +2,7 @@
 <html lang="it">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Trova gli oggetti</title>
   <style>
     * {
@@ -15,7 +15,6 @@
       height: 100%;
       width: 100%;
       font-family: Arial, sans-serif;
-      overflow: hidden;
     }
 
     .game-container {
@@ -28,17 +27,13 @@
     .background {
       width: 100%;
       height: 100%;
-      position: relative;
-    }
-
-    .background img.background-image {
-      width: 100%;
-      height: 100%;
-      object-fit: contain;
+      background-image: url('giochinobookino.jpg');
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-position: center;
       position: absolute;
       top: 0;
       left: 0;
-      z-index: 1;
     }
 
     .title {
@@ -46,40 +41,39 @@
       top: 5%;
       left: 50%;
       transform: translateX(-50%);
-      font-size: 2rem;
       color: #000;
+      font-size: 2rem;
       text-align: center;
-      z-index: 2;
+      z-index: 10;
+      background-color: rgba(255, 255, 255, 0.6);
+      padding: 10px;
+      border-radius: 10px;
     }
 
     .title img {
-      width: 40px;
+      width: 30px;
       margin-left: 10px;
     }
 
     .objects {
       position: absolute;
-      top: 0;
-      left: 0;
       width: 100%;
       height: 100%;
-      z-index: 2;
     }
 
-    .object {
+    .objects .object {
       position: absolute;
-      width: 50px;
-      height: 50px;
       cursor: pointer;
       transition: opacity 0.3s ease;
+      z-index: 20;
     }
 
-    .object img {
-      width: 100%;
-      height: 100%;
+    .objects .object img {
+      width: 50px;
+      height: 50px;
     }
 
-    /* Posizione oggetti (percentuale, resta fissa su tutti i device) */
+    /* Oggetti posizionati in % così restano fissi su tutti i dispositivi */
     #object1 { top: 20%; left: 30%; }
     #object2 { top: 40%; left: 50%; }
     #object3 { top: 60%; left: 70%; }
@@ -93,52 +87,52 @@
       left: 50%;
       transform: translate(-50%, -50%);
       font-size: 2rem;
-      font-weight: bold;
       color: #000;
-      z-index: 3;
-      background: rgba(255, 255, 255, 0.8);
-      padding: 10px 20px;
+      font-weight: bold;
+      background-color: rgba(255, 255, 255, 0.8);
+      padding: 20px;
       border-radius: 10px;
+      z-index: 30;
     }
 
-    /* Responsive migliorato */
+    /* Avviso per modalità verticale su mobile */
+    .portrait-warning {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: #000;
+      color: white;
+      z-index: 9999;
+      font-size: 1.5rem;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 20px;
+    }
+
     @media (max-width: 768px) {
-      .title {
-        font-size: 1.5rem;
-      }
-
-      .object {
-        width: 40px;
-        height: 40px;
-      }
-
-      .title img {
-        width: 30px;
-      }
+      .title { font-size: 1.5rem; }
+      .objects .object img { width: 40px; height: 40px; }
     }
 
     @media (max-width: 480px) {
-      .title {
-        font-size: 1.2rem;
-      }
-
-      .object {
-        width: 35px;
-        height: 35px;
-      }
-
-      .title img {
-        width: 25px;
-      }
+      .title { font-size: 1.2rem; }
+      .objects .object img { width: 35px; height: 35px; }
     }
   </style>
 </head>
 <body>
+  <!-- Avviso per ruotare il telefono -->
+  <div class="portrait-warning" id="rotateWarning">
+    Ruota il telefono in orizzontale per giocare 📱➡️📲
+  </div>
+
+  <!-- Contenitore gioco -->
   <div class="game-container">
     <div class="background">
-      <!-- Immagine di sfondo -->
-      <img src="giochinobookino.jpg" alt="Sfondo" class="background-image" />
-
       <!-- Titolo -->
       <div class="title">
         <span>TROVA TUTTI I</span>
@@ -176,16 +170,27 @@
 
     function findObject(objectId) {
       const object = document.getElementById(objectId);
-      if (!object.classList.contains("found")) {
-        object.style.opacity = "0.5";
-        object.classList.add("found");
+      if (object.style.opacity !== '0.5') {
+        object.style.opacity = '0.5';
         objectsFound++;
-
         if (objectsFound === 5) {
-          document.getElementById("winMessage").style.display = "block";
+          document.getElementById('winMessage').style.display = 'block';
         }
       }
     }
+
+    function checkOrientation() {
+      const warning = document.getElementById('rotateWarning');
+      if (window.innerHeight > window.innerWidth) {
+        warning.style.display = 'flex';
+      } else {
+        warning.style.display = 'none';
+      }
+    }
+
+    window.addEventListener("resize", checkOrientation);
+    window.addEventListener("orientationchange", checkOrientation);
+    window.addEventListener("load", checkOrientation);
   </script>
 </body>
 </html>
