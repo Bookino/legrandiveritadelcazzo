@@ -3,102 +3,194 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Trova gli Oggetti</title>
+    <title>Trova gli oggetti</title>
     <style>
-        body {
+        /* Impostazioni di base */
+        * {
             margin: 0;
-            overflow: hidden;
+            padding: 0;
+            box-sizing: border-box;
         }
+
+        html, body {
+            height: 100%;
+            width: 100%;
+            overflow: hidden; /* Per evitare che ci siano barre di scorrimento */
+            font-family: Arial, sans-serif;
+        }
+
+        /* Contenitore principale per il gioco */
         .game-container {
             position: relative;
-            width: 100vw;
-            height: 100vh;
-            background: url('giochinobookino.jpg') no-repeat center center/cover;
+            width: 100vw;   /* Usa la larghezza intera del viewport */
+            height: 100vh;  /* Usa l'altezza intera del viewport */
+            overflow: hidden; /* Nasconde eventuali aree bianche fuori dallo schermo */
         }
-        .header {
+
+        /* Sfondo del gioco */
+        .background {
+            width: 100%;
+            height: 100%;
+            background-image: url('giochinobookino.jpg'); /* Sostituisci con il tuo URL */
+            background-size: cover;
+            background-position: center;
             position: absolute;
-            top: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: rgba(255, 255, 255, 0.8);
-            padding: 15px;
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            font-size: 24px;
-            font-weight: bold;
-            z-index: 10;
+            top: 0;
+            left: 0;
         }
-        .header img {
-            width: 50px;
-            height: 50px;
-        }
+
+        /* Titolo in alto */
         .title {
             position: absolute;
-            top: 5%;
+            top: 10%;
             left: 50%;
             transform: translateX(-50%);
-            font-size: 48px;
-            font-weight: bold;
-            color: white;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+            color: #000;
+            font-size: 2rem;
+            text-align: center;
             z-index: 10;
         }
-        .object {
+
+        .title img {
+            width: 30px;
+            margin-left: 10px;
+        }
+
+        /* Oggetti da trovare */
+        .objects {
             position: absolute;
+            width: 100%;
+            height: 100%;
+        }
+
+        .objects .object {
+            position: absolute;
+            cursor: pointer;
+            transition: opacity 0.3s ease;
+            z-index: 20;
+        }
+
+        /* Posizioni fisse degli oggetti */
+        .objects .object:nth-child(1) {
+            top: 20%;
+            left: 25%;
+        }
+
+        .objects .object:nth-child(2) {
+            top: 30%;
+            left: 50%;
+        }
+
+        .objects .object:nth-child(3) {
+            top: 40%;
+            left: 70%;
+        }
+
+        .objects .object:nth-child(4) {
+            top: 60%;
+            left: 20%;
+        }
+
+        .objects .object:nth-child(5) {
+            top: 70%;
+            left: 60%;
+        }
+
+        /* Immagine oggetto */
+        .objects .object img {
             width: 50px;
             height: 50px;
-            cursor: pointer;
         }
-        .found {
-            border: 3px solid green;
-            border-radius: 10px;
-        }
-        #message {
+
+        /* Messaggio di vittoria */
+        .win-message {
+            display: none;
             position: absolute;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            background: white;
-            padding: 20px;
-            font-size: 24px;
-            display: none;
+            font-size: 2rem;
+            color: #000;
+            font-weight: bold;
+            z-index: 30;
+        }
+
+        /* Responsività */
+        @media (max-width: 768px) {
+            .title {
+                font-size: 1.5rem;
+            }
+
+            .objects .object img {
+                width: 40px;
+                height: 40px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .title {
+                font-size: 1.2rem;
+            }
+
+            .objects .object img {
+                width: 35px;
+                height: 35px;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="title">Trova tutti gli oggetti nascosti!</div>
-    <div class="header">
-        <span>Trova tutti i</span>
-        <img src="SOLOFACCIAMEMESIMBOLO.png" alt="Oggetto da trovare">
-    </div>
+    <!-- Div per il gioco -->
     <div class="game-container">
-        <img class="object" src="SOLOFACCIAMEMESIMBOLO.png" style="top: 40%; left: 38%;">
-        <img class="object" src="oggetto2.png" style="top: 50%; left: 60%;">
-        <img class="object" src="oggetto3.png" style="top: 70%; left: 40%;">
-        <img class="object" src="oggetto4.png" style="top: 30%; left: 80%;">
-        <img class="object" src="oggetto5.png" style="top: 60%; left: 10%;">
+        <!-- Immagine di sfondo (inserisci tu l'immagine) -->
+        <div class="background" style="background-image: url('giochinobookino.jpg');">
+            
+            <!-- Titolo in alto -->
+            <div class="title">
+                <span>TROVA TUTTI I</span>
+                <img src="oggettodatrovareimmagine.jpg" alt="Oggetto da trovare">
+            </div>
+
+            <!-- Gli oggetti da trovare (cliccabili) -->
+            <div class="objects">
+                <div class="object" id="object1" style="top: 20%; left: 30%;" onclick="findObject('object1')">
+                    <img src="SOLOFACCIAMEMESIMBOLO.png" alt="Oggetto 1">
+                </div>
+                <div class="object" id="object2" style="top: 40%; left: 50%;" onclick="findObject('object2')">
+                    <img src="oggettodatrovareimmagine.jpg" alt="Oggetto 2">
+                </div>
+                <div class="object" id="object3" style="top: 60%; left: 70%;" onclick="findObject('object3')">
+                    <img src="oggettodatrovareimmagine.jpg" alt="Oggetto 3">
+                </div>
+                <div class="object" id="object4" style="top: 70%; left: 20%;" onclick="findObject('object4')">
+                    <img src="oggettodatrovareimmagine.jpg" alt="Oggetto 4">
+                </div>
+                <div class="object" id="object5" style="top: 80%; left: 60%;" onclick="findObject('object5')">
+                    <img src="oggettodatrovareimmagine.jpg" alt="Oggetto 5">
+                </div>
+            </div>
+
+            <!-- Messaggio quando tutti gli oggetti sono trovati -->
+            <div id="winMessage" class="win-message">
+                Hai trovato tutti gli oggetti!
+            </div>
+        </div>
     </div>
-    <div id="message">Hai trovato tutti gli oggetti!</div>
 
     <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            let objects = document.querySelectorAll(".object");
-            let foundCount = 0;
+        let objectsFound = 0;
 
-            objects.forEach(obj => {
-                obj.addEventListener("click", function() {
-                    if (!obj.classList.contains("found")) {
-                        obj.classList.add("found");
-                        foundCount++;
-                        if (foundCount === objects.length) {
-                            document.getElementById("message").style.display = "block";
-                        }
-                    }
-                });
-            });
-        });
+        // Funzione per segnare gli oggetti trovati
+        function findObject(objectId) {
+            const object = document.getElementById(objectId);
+            object.style.opacity = '0.5';  // Effetto visivo: l'oggetto diventa semi-trasparente
+            objectsFound++;
+
+            // Controlla se sono stati trovati tutti gli oggetti
+            if (objectsFound === 5) {
+                document.getElementById('winMessage').style.display = 'block';  // Mostra il messaggio
+            }
+        }
     </script>
 </body>
 </html>
