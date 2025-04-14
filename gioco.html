@@ -56,6 +56,18 @@
       margin-left: 10px;
     }
 
+    .timer {
+      position: absolute;
+      top: 5%;
+      left: 5%;
+      font-size: 1.5rem;
+      color: #000;
+      background-color: rgba(255,255,255,0.7);
+      padding: 5px 10px;
+      border-radius: 10px;
+      z-index: 10;
+    }
+
     .objects {
       position: absolute;
       width: 100%;
@@ -89,14 +101,12 @@
       border-radius: 15px;
     }
 
-    /* Posizioni fisse degli oggetti */
     #object1 { top: 20%; left: 30%; }
     #object2 { top: 40%; left: 50%; }
     #object3 { top: 60%; left: 70%; }
     #object4 { top: 70%; left: 20%; }
     #object5 { top: 80%; left: 60%; }
 
-    /* Overlay per avviso orientamento verticale */
     .portrait-warning {
       display: flex;
       visibility: hidden;
@@ -140,20 +150,18 @@
 </head>
 <body>
   <div class="game-container">
-    <!-- Overlay di avviso -->
     <div id="rotateWarning" class="portrait-warning">
       Ruota il telefono in orizzontale per giocare
     </div>
 
-    <!-- Sfondo -->
     <div class="background">
-      <!-- Titolo -->
       <div class="title">
         <span>TROVA TUTTI I</span>
         <img src="oggettodatrovareimmagine.jpg" alt="Oggetto da trovare" />
       </div>
 
-      <!-- Oggetti cliccabili -->
+      <div class="timer" id="timer">Tempo: 0s</div>
+
       <div class="objects">
         <div class="object" id="object1" onclick="findObject('object1')">
           <img src="SOLOFACCIAMEMESIMBOLO.png" alt="Oggetto 1" />
@@ -172,7 +180,6 @@
         </div>
       </div>
 
-      <!-- Messaggio di vittoria -->
       <div id="winMessage" class="win-message">
         Hai trovato tutti gli oggetti!
       </div>
@@ -181,13 +188,28 @@
 
   <script>
     let objectsFound = 0;
+    let seconds = 0;
+    let timerInterval;
+
+    function startTimer() {
+      timerInterval = setInterval(() => {
+        seconds++;
+        document.getElementById("timer").innerText = "Tempo: " + seconds + "s";
+      }, 1000);
+    }
+
+    function stopTimer() {
+      clearInterval(timerInterval);
+    }
 
     function findObject(objectId) {
       const object = document.getElementById(objectId);
       if (object.style.opacity !== '0.5') {
         object.style.opacity = '0.5';
         objectsFound++;
+        if (objectsFound === 1) startTimer(); // avvia il timer al primo clic
         if (objectsFound === 5) {
+          stopTimer();
           document.getElementById('winMessage').style.display = 'block';
         }
       }
