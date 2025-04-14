@@ -8,16 +8,16 @@
     html, body {
       margin: 0;
       padding: 0;
-      width: 100%;
-      height: 100%;
+      width: 100vw;
+      height: 100vh;
       overflow: hidden;
       font-family: Arial, sans-serif;
     }
 
     .game-container {
       position: relative;
-      width: 100%;
-      height: 100%;
+      width: 100vw;
+      height: 100vh;
       background-color: black;
     }
 
@@ -38,7 +38,7 @@
       left: 50%;
       transform: translateX(-50%);
       padding: 10px 20px;
-      font-size: 4vw;
+      font-size: 2rem;
       color: white;
       z-index: 10;
       display: flex;
@@ -47,60 +47,63 @@
     }
 
     .title img {
-      width: 6vw;
-      height: 6vw;
-      margin-left: 1vw;
+      width: 30px;
+      height: 30px;
+      margin-left: 10px;
     }
 
     .timer, .objects-found {
       position: absolute;
       top: 5%;
-      font-size: 2vw;
+      font-size: 1.5rem;
       color: white;
       z-index: 10;
-      padding: 1vw;
-      border-radius: 12px;
-      background: rgba(0, 0, 0, 0.6);
     }
 
     .timer {
       left: 5%;
+      background: rgba(0, 0, 0, 0.6);
+      padding: 8px 15px;
+      border-radius: 12px;
     }
 
     .objects-found {
       right: 5%;
+      background: rgba(0, 0, 0, 0.6);
+      padding: 8px 15px;
+      border-radius: 12px;
     }
 
     .objects .object {
       position: absolute;
       cursor: pointer;
       z-index: 20;
+      width: 12vw;  /* Uso una misura relativa per la larghezza */
+      height: 12vw; /* Uso una misura relativa per l'altezza */
     }
 
     .objects .object img {
-      width: 10vw;
-      height: 10vw;
+      width: 100%;
+      height: 100%;
     }
 
-    /* Posizionamento degli oggetti in modo più responsivo */
-    #object1 { top: 35%; left: 30%; }
-    #object2 { top: 58%; left: 5%; }
-    #object3 { top: 48%; left: 40%; }
-    #object4 { top: 85%; left: 85%; }
-    #object5 { top: 45%; left: 90%; }
+    #object1 { top: 36%; left: 35.2%; }
+    #object2 { top: 58.5%; left: 5%; }
+    #object3 { top: 49%; left: 42%; }
+    #object4 { top: 90%; left: 90%; }
+    #object5 { top: 44%; left: 92%; }
 
     .win-message {
       position: absolute;
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
-      background: rgba(255, 255, 255, 0.9);
-      padding: 5vw 6vw;
+      background: rgba(255,255,255,0.9);
+      padding: 30px 40px;
       border-radius: 15px;
-      font-size: 4vw;
+      font-size: 2rem;
       z-index: 30;
       display: none;
-      text-align: center;
     }
 
     .rotate-warning {
@@ -116,22 +119,8 @@
       justify-content: center;
       align-items: center;
       text-align: center;
-      font-size: 5vw;
-      padding: 10%;
-    }
-
-    #toggleMusic {
-      position: absolute;
-      bottom: 5%;
-      left: 50%;
-      transform: translateX(-50%);
-      background: rgba(0, 0, 0, 0.6);
-      padding: 2vw 4vw;
-      color: white;
-      border-radius: 12px;
-      font-size: 3vw;
-      cursor: pointer;
-      z-index: 20;
+      font-size: 2rem;
+      padding: 20px;
     }
 
     @media screen and (orientation: portrait) {
@@ -140,9 +129,38 @@
       }
     }
 
-    @media screen and (orientation: landscape) {
-      .rotate-warning {
-        display: none;
+    #toggleMusic {
+      position: absolute;
+      bottom: 10%;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(0, 0, 0, 0.6);
+      padding: 10px 20px;
+      color: white;
+      border-radius: 12px;
+      font-size: 1.2rem;
+      cursor: pointer;
+      z-index: 20;
+    }
+
+    /* Aggiusto il layout per schermi piccoli */
+    @media screen and (max-width: 768px) {
+      .title {
+        font-size: 1.5rem;  /* Ridurre la dimensione del titolo per schermi piccoli */
+      }
+
+      .timer, .objects-found {
+        font-size: 1rem;  /* Font più piccolo */
+      }
+
+      .win-message {
+        font-size: 1.5rem;
+        padding: 20px 30px;
+      }
+
+      .objects .object {
+        width: 20vw;  /* Oggetti più piccoli su dispositivi mobili */
+        height: 20vw;
       }
     }
   </style>
@@ -225,11 +243,10 @@
         objectsFound++;
         document.getElementById("objectsFound").innerText = "Oggetti trovati: " + objectsFound;
         
-        // Riproduci l'effetto sonoro ogni volta che un oggetto viene cliccato
         const clickSound = document.getElementById('clickSound');
         clickSound.play();
 
-        if (objectsFound === 1) startTimer();  // Timer parte solo alla prima interazione
+        if (objectsFound === 1) startTimer();  
         if (objectsFound === 5) {
           stopTimer();
           document.getElementById("winMessage").style.display = "block";
@@ -246,7 +263,6 @@
       }
     }
 
-    // Funzione per gestire il pulsante di accensione/spegnimento della musica
     toggleMusicBtn.addEventListener("click", () => {
       if (musicOn) {
         backgroundMusic.pause();
