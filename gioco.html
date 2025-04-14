@@ -28,9 +28,10 @@
       width: 100%;
       height: 100%;
       background-image: url('giochinobookino.jpg');
-      background-size: cover;
+      background-size: contain;
       background-position: center;
       background-repeat: no-repeat;
+      background-color: black;
     }
 
     .title {
@@ -76,12 +77,21 @@
       right: 2%;
     }
 
+    .objects {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+    }
+
     .objects .object {
       position: absolute;
       cursor: pointer;
       z-index: 20;
       width: clamp(30px, 8vw, 50px);
       height: clamp(30px, 8vw, 50px);
+      transform: translate(-50%, -50%);
     }
 
     .objects .object img {
@@ -90,7 +100,8 @@
       object-fit: contain;
     }
 
-    /* Posizioni degli oggetti in percentuale */
+    /* Posizioni assolute degli oggetti basate sull'immagine di sfondo */
+    /* Questi valori vanno calibrati in base alla tua immagine specifica */
     #object1 { top: 36%; left: 35.2%; }
     #object2 { top: 58.5%; left: 5%; }
     #object3 { top: 49%; left: 42%; }
@@ -282,12 +293,19 @@
       musicOn = !musicOn;
     });
 
+    // Calibrazione delle posizioni degli oggetti
+    function calibratePositions() {
+      // Questa funzione può essere usata per aggiustare dinamicamente le posizioni
+      // se necessario, basandosi sulle dimensioni effettive dell'immagine
+    }
+
     // Ottimizzazione per il ridimensionamento
     let resizeTimeout;
     function handleResize() {
       clearTimeout(resizeTimeout);
       resizeTimeout = setTimeout(() => {
         checkOrientation();
+        calibratePositions();
       }, 100);
     }
 
@@ -295,6 +313,7 @@
     window.addEventListener("orientationchange", checkOrientation);
     window.addEventListener("load", () => {
       checkOrientation();
+      calibratePositions();
       
       // Tentativo di autoplay con gestione dell'errore
       document.addEventListener('click', function initialMusic() {
