@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Fuga dal Congresso - Storia a Bivi</title>
+  <style>
+    body {
+      background-color: #FFF176;
+      font-family: 'Comic Sans MS', cursive, sans-serif;
+      margin: 0;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    #scene-container {
+      max-width: 500px;
+      text-align: center;
+      display: none;
+      animation: fadeIn 1s ease-in-out forwards;
+    }
+
+    #scene-image {
+      width: 100%;
+      border-radius: 15px;
+      margin-bottom: 20px;
+    }
+
+    .choice-btn {
+      margin: 10px;
+      padding: 10px 20px;
+      background-color: #ff6f61;
+      border: none;
+      border-radius: 10px;
+      color: white;
+      cursor: pointer;
+      font-size: 16px;
+      transition: transform 0.2s;
+    }
+
+    .choice-btn:hover {
+      transform: scale(1.1);
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    #restart-btn {
+      display: none;
+      margin-top: 20px;
+      background-color: #4caf50;
+    }
+  </style>
+</head>
+<body>
+  <h1>✨ Fuga dal Congresso ✨</h1>
+  <div id="scene-container">
+    <img id="scene-image" src="" alt="Scena" />
+    <p id="scene-text"></p>
+    <div id="choices"></div>
+  </div>
+  <button id="restart-btn" class="choice-btn">Ricomincia la missione</button>
+
+  <script>
+    const scenes = {
+      19: {
+        text: "GOOD CHILL ENDING: Diventi amico delle scimmie, inizi a parlare con loro e vivere con loro .Questa è la vera vittoria",
+        image: "https://via.placeholder.com/600x300?text=Finale+3",
+        choices: []
+      },
+      18: {
+        text: "BAD ENDING: Branco di tigri affamate che vogliono SFONDARTI.",
+        image: "https://via.placeholder.com/600x300?text=Finale+3",
+        choices: []
+      },
+      17: {
+        text: "Sei finito al circo. Ironia della sorte un pagliaccio al circo.",
+        image: "https://via.placeholder.com/600x300?text=Scena+4",
+        choices: [
+          { text: "Corri verso sinistra", nextScene: 18 },
+          { text: "Corri verso destra", nextScene: 19 }
+        ]
+      },
+      16: {
+        text: "Scegli la strada da intraprendere.",
+        image: "https://via.placeholder.com/600x300?text=Scena+4",
+        choices: [
+          { text: "Corri verso su", nextScene: 14 },
+          { text: "Corri verso giù", nextScene: 17 }
+        ]
+      },
+      
+      15: {
+        text: "ENDING: Branco di cani affamati vogliono assaggiarti.",
+        image: "punto15foto.png",
+        choices: []
+      },
+      14: {
+        text: "GOOD ENDING: Sei salvo.",
+        image: "punto6foto.png",
+        choices: []
+      },
+      13: {
+        text: "Riesci a calmarle e avere tempo per sgattaiolare via...",
+        image: "punto13foto.png",
+        choices: [
+          { text: "Corri verso sinistra", nextScene: 14 },
+          { text: "Corri verso destra", nextScene: 15 }
+        ]
+      },
+      1: {
+        text: "Ti svegli nudo e ubriaco in mezzo al Congresso delle ex-mogli arrabbiate. Devi uscire da lì!",
+        image: "donne.png",
+        choices: [
+          { text: "Striscia fuori dalla finestra", nextScene: 2 },
+          { text: "Chiedi scusa a tutte", nextScene: 3 }
+        ]
+      },
+      2: {
+        text: "Ti incastri tra le sbarre della finestra. Una guardia ti nota.",
+        image: "sbarre.png",
+        choices: [
+          { text: "Fingi di essere una statua artistica", nextScene: 4 },
+          { text: "Urla e chiedi aiuto", nextScene: 5 }
+        ]
+      },
+      3: {
+        text: "Una delle ex ti riconosce: è Carla, la tua ex del liceo!",
+        image: "carlamitrova.png",
+        choices: [
+          { text: "Dille che sei cambiato", nextScene: 9 },
+          { text: "Prova a conquistarla di nuovo", nextScene: 10 }
+        ]
+      },
+      4: {
+        text: "La situazione si complica. Una manifestante ti insegue con una ciabatta gigante.",
+        image: "punto4foto.png",
+        choices: [
+          { text: "Corri verso l'uscita secondaria", nextScene: 6 },
+          { text: "Nasconditi in bagno", nextScene: 7 }
+        ]
+      },
+      5: {
+        text: "Ti mettono in mezzo per un dibattito pubblico su quanto fai schifo.",
+        image: "punto5foto.png",
+        choices: [
+          { text: "Fai il simpatico per uscirne", nextScene: 13 },
+          { text: "Ti fingi morto", nextScene: 8 }
+        ]
+      },
+      6: {
+        text: "ENDING! Riesci a fuggire, ma hai perso i pantaloni per sempre.",
+        image: "punto6foto.png",
+        choices: []
+      },
+      7: {
+        text: "ENDING! Resti nascosto per 1 mese, ora hai una barba e un trauma.",
+        image: "punto7foto.png",
+        choices: []
+      },
+      8: {
+        text: "BAD ENDING: Il peggio che potesse capitarti, vogliono sacrificarti come simbolo di vendetta contro gli uomini.",
+        image: "punto8foto.png",
+        choices: []
+      },
+      9: {
+        text: "Carla ti guarda dubbiosa. Le dici che hai iniziato terapia, cucini da solo e non usi più emoji con la lingua di fuori.",
+        image: "punto9foto.png",
+        choices: [
+          { text: "Le chiedi scusa sinceramente", nextScene: 11 },
+          { text: "Fai una battuta volgare", nextScene: 8 }
+        ]
+      },
+      10: {
+        text: "Tenti un approccio sexy ma inciampi e le versi vino sui piedi. Un disastro.",
+        image: "punto10foto.png",
+        choices: [
+          { text: "Provi a rimediare con un ballo romantico", nextScene: 12 },
+          { text: "Scappi gridando!", nextScene: 16 }
+        ]
+      },
+      11: {
+        text: "ROMANTIC ENDING: Carla sorride. Ti porge la mano e ti accompagna fuori. Sei salvo. E forse... innamorato di nuovo?(forse)",
+        image: "punto11foto.png",
+        choices: []
+      },
+      12: {
+        text: "STRANGE ENDING: Netflix ti contatta per fare un documentario. Diventi virale, poi molli tutto e fondi una setta nei boschi.(con Carla)",
+        image: "punto12foto.png",
+        choices: []
+      }
+    };
+  
+    let currentScene = 1;
+  
+    const sceneContainer = document.getElementById('scene-container');
+    const sceneText = document.getElementById('scene-text');
+    const sceneImage = document.getElementById('scene-image');
+    const choicesDiv = document.getElementById('choices');
+    const restartBtn = document.getElementById('restart-btn');
+  
+    function loadScene(sceneId) {
+      const scene = scenes[sceneId];
+      currentScene = sceneId;
+      sceneText.textContent = scene.text;
+      sceneImage.src = scene.image;
+      choicesDiv.innerHTML = '';
+  
+      if (scene.choices.length === 0) {
+        restartBtn.style.display = 'inline-block';
+      } else {
+        restartBtn.style.display = 'none';
+      }
+  
+      scene.choices.forEach(choice => {
+        const btn = document.createElement('button');
+        btn.textContent = choice.text;
+        btn.className = 'choice-btn';
+        btn.onclick = () => loadScene(choice.nextScene);
+        choicesDiv.appendChild(btn);
+      });
+    }
+  
+    restartBtn.onclick = () => {
+      loadScene(1);
+    }
+  
+    sceneContainer.style.display = 'block';
+    loadScene(1);
+  </script>
+  
+  
+</body>
+</html>
