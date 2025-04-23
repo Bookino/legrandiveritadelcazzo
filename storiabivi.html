@@ -54,10 +54,20 @@
       margin-top: 20px;
       background-color: #4caf50;
     }
+
+    #disclaimer {
+      font-size: 14px;
+      color: #555;
+      margin-bottom: 20px;
+      display: none;
+    }
   </style>
 </head>
 <body>
   <h1>✨ Fuga dal Congresso ✨</h1>
+  <div id="disclaimer">
+    <p><strong>Attiva la versione desktop per un'esperienza migliore!</strong></p>
+  </div>
   <div id="scene-container">
     <img id="scene-image" src="" alt="Scena" />
     <p id="scene-text"></p>
@@ -202,6 +212,7 @@
     const sceneImage = document.getElementById('scene-image');
     const choicesDiv = document.getElementById('choices');
     const restartBtn = document.getElementById('restart-btn');
+    const disclaimer = document.getElementById('disclaimer');
   
     function loadScene(sceneId) {
       const scene = scenes[sceneId];
@@ -220,7 +231,12 @@
         const btn = document.createElement('button');
         btn.textContent = choice.text;
         btn.className = 'choice-btn';
-        btn.onclick = () => loadScene(choice.nextScene);
+        btn.onclick = () => {
+          if (currentScene === 1) {
+            disclaimer.style.display = 'none';  // Nasconde il disclaimer dopo la prima scelta
+          }
+          loadScene(choice.nextScene);
+        };
         choicesDiv.appendChild(btn);
       });
     }
@@ -232,7 +248,5 @@
     sceneContainer.style.display = 'block';
     loadScene(1);
   </script>
-  
-  
 </body>
 </html>
